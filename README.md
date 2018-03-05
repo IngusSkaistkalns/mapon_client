@@ -20,7 +20,25 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Instantiate client:
+  * api_key - create it under Settings/API keys, if blank, will try to read environment variable MAPON_CLIENT_API_KEY on the [site](https://mapon.com/new/settings#9) 
+  * base_url - defaults to https://mapon.com/api/v1/
+  * format - json/xml, defaults to json
+
+```ruby
+mapon_client = MaponClient::Client.new
+# OR
+mapon_client = MaponClient::Client.new(
+  api_key: ENV['BY_DIFFERENT_NAME_API_KEY'],
+  base_url: 'https://mapon.com/api/v300/not-the-default-endpoint',
+  format: 'xml'
+)
+```
+### Rest client
+
+MaponClient uses [rest-client](https://github.com/rest-client/rest-client) as HTTP client.
+So on any lower level calls rest-client library class instances gets returned,
+like RestClient::Response, RestClient::Resource, etc.
 
 ## Development
 
