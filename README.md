@@ -2,6 +2,16 @@
 
 Ruby client library for https://www.mapon.com API
 
+### GET API
+*Currently supports only `GET` actions via DSL*
+
+### POST API
+`POST` actions still can be executed by using `MaponClient::Client#resource_base`,
+that is `RestClient::Resource` instance already with parameter `key` set.
+Thought currently RestClient does not handle parameter merging.
+It completely overrides parameters set on Resource init, so `MaponClient::Client#with_key` is available
+for appending key to payload.
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -34,6 +44,148 @@ mapon_client = MaponClient::Client.new(
   format: 'xml'
 )
 ```
+
+### Request resources
+
+Mapon API documentation can be found [here](https://mapon.com/api).
+Look there to find out required params in case error messages are not clear enough.
+
+#### Company
+```ruby
+@mapon_client.resources[:company].get
+```
+
+#### Unit list
+```ruby
+@mapon_client.resources[:unit].list
+@mapon_client.resources[:unit].list(
+  unit_id: [80669', 85113], car_number: ['VY92278', 'DK56625'], empty_box_id: true,
+  include: [
+    'in_objects', 'io_din', 'fuel', 'can', 'reefer', 'drivers', 'temperature', 'ambienttemp', 'device', 'supply_voltage'
+  ]
+)
+```
+
+#### Unit group
+```ruby
+@mapon_client.resources[:unit_group].list(unit_id: [80669, 85113])
+
+@mapon_client.resources[:unit_group].list_units(id: 11677)
+
+```
+
+#### Unit data
+```ruby
+@mapon_client.resources[:unit_data].ignitions(
+  from: '2018-02-01T00:00:00Z', till: '2018-02-10T00:00:00Z', unit_id: [80669, 85113]
+)
+
+@mapon_client.resources[:unit_data].temperature(
+  from: '2018-02-01T00:00:00Z', till: '2018-02-20T00:00:00Z', unit_id: 80669
+)
+
+@mapon_client.resources[:unit_data].digital_inputs(
+  from: '2018-02-01T00:00:00Z', till: '2018-02-20T00:00:00Z', unit_id: 80669
+)
+
+@mapon_client.resources[:unit_data].can_period(
+  datetime: '2018-02-01T00:00:00Z', unit_id: 80669,
+  include: [
+    'rpm_average', 'rpm_max', 'fuel_level', 'service_distance', 'total_distance', 'total_fuel', 'total_engine_hours', 'ambient_temperature'
+  ]
+)
+
+@mapon_client.resources[:unit_data].can_point(
+  from: '2018-02-01T00:00:00Z', till: '2018-02-20T00:00:00Z', unit_id: 80669,
+  include: [
+    'rpm_average', 'rpm_max', 'fuel_level', 'service_distance', 'total_distance', 'total_fuel', 'total_engine_hours', 'ambient_temperature'
+  ]
+)
+
+@mapon_client.resources[:unit_data].fields(unit_id: 85188)
+```
+
+#### Reefer
+```ruby
+@mapon_client.resources[:reefer].alert_list(id: 12345, unit_id: [80669, 85113])
+
+@mapon_client.resources[:reefer].runmodes(unit_id: [80669, 85113])
+
+@mapon_client.resources[:reefer].list_temperature_data(
+  unit_id: 85113, from: '2018-01-20T00:00:00Z', till: '2018-03-03T00:00:00Z'
+)
+```
+
+#### Route
+```ruby
+@mapon_client.resources[:route].list(
+  from: '2018-02-20T00:00:00Z', till: '2018-03-06T00:00:00Z', unit_id: [80669, 85113], empty_box_id: true,
+  include: ['polyline', 'speed', 'decoded_route', 'driver_id']
+)
+
+@mapon_client.resources[:route].custom_fields(route_id: 639655550)
+```
+
+For decoding polyline use https://github.com/joshuaclayton/polylines
+
+#### Fuel
+```ruby
+@mapon_client.resources[:fuel].summary(
+  from: '2018-02-20T00:00:00Z', till: '2018-03-06T00:00:00Z', unit_id: [86303, 80669]
+)
+
+@mapon_client.resources[:fuel].changes(
+  from: '2018-02-20T00:00:00Z', till: '2018-03-06T00:00:00Z', unit_id: [86303, 80669]
+)
+```
+
+#### Object
+```ruby
+@mapon_client.resources[:object].list(
+  id: 345901, name: 'Depot', group_id: 0, deleted: 1, updated_from: '2017-12-22T09:50:23Z', updated_till: '2017-12-22T09:55:25Z'
+)
+
+@mapon_client.resources[:object].list_groups(id: 1234, name: 'Group name')
+```
+
+#### User
+```ruby
+@mapon_client.resources[:user].list(id: '116361', type: 'user_all')
+```
+
+#### Driver
+```ruby
+@mapon_client.resources[:driver].list(id: 116551)
+```
+
+#### Tachograph
+```ruby
+@mapon_client.resources[:tachograph].list_ddd_driver(from: '2018-02-20T00:00:00Z', till: '2018-03-03T00:00:00Z')
+
+@mapon_client.resources[:tachograph].download_ddd_driver(id: 55)
+
+@mapon_client.resources[:tachograph].list_ddd_vehicle(from: '2018-02-20T00:00:00Z', till: '2018-03-03T00:00:00Z')
+
+@mapon_client.resources[:tachograph].download_ddd_vehicle(id: 55)
+```
+
+#### Tracking
+```ruby
+@mapon_client.resources[:tracking].list(from: '2018-02-20T00:00:00Z', till: '2018-03-03T00:00:00Z')
+```
+
+#### Data forward
+```ruby
+@mapon_client.resources[:data_forward].list
+
+@mapon_client.resources[:data_forward].list_packs
+```
+
+#### Application menu
+```ruby
+@mapon_client.resources[:application_menu].list
+```
+
 ### Rest client
 
 MaponClient uses [rest-client](https://github.com/rest-client/rest-client) as HTTP client.

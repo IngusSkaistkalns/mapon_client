@@ -1,4 +1,5 @@
 require 'rest-client'
+require 'mapon_client/resources'
 
 module MaponClient
   class Client
@@ -23,21 +24,23 @@ module MaponClient
     end
 
     def [](*args)
-      @resource_base.public_send(:[], *args)
+      @resource_base.public_send(
+        :[],
+        *append_format_to_url(*args)
+      )
     end
 
-    def company
-      self[with_format("company/get")].get
+    def resources
+      @resources ||= Resources.new(self)
     end
 
-    def unit_list
-      self[with_format("unit/list")].get
+    def with_key(params)
+      params.merge(key: @api_key)
     end
 
-    private
-
-    def with_format(suburl)
-      "#{suburl}.#{@format}"
+    def append_format_to_url(*args)
+      suburl = "#{args.shift}.#{@format}"
+      args.unshift(suburl)
     end
   end
 end
