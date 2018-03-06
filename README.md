@@ -3,7 +3,7 @@
 Ruby client library for https://www.mapon.com API
 
 ### GET API
-*Currently supports only `GET` actions via DSL*
+Check `lib/mapon_client/resources/*` for supported resource actions.
 
 ### POST API
 `POST` actions still can be executed by using `MaponClient::Client#resource_base`,
