@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Ingus Skaistkalns"]
   spec.email         = ["ingus.skaistkalns@gmail.com"]
 
-  spec.summary       = %q{Ruby client library for https://www.mapon.com API}
+  spec.summary       = %q{Ruby client library for mapon.com API}
   spec.homepage      = "https://github.com/IngusSkaistkalns/mapon_client"
   spec.license       = "MIT"
 

@@ -62,7 +62,7 @@ Look there to find out required params in case error messages are not clear enou
 
 #### Company
 ```ruby
-@mapon_client.resources[:company].get
+@mapon_client.company.get
 ```
 
 #### Unit list
