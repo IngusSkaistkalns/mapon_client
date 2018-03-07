@@ -1,29 +1,10 @@
 module MaponClient
   class Resources
     class TachographResource < Resources
-      def list_ddd_driver(params = {})
-        @client['tachograph/list_ddd_driver'].get(
-          params: with_key(params)
-        )
-      end
-
-      def download_ddd_driver(params = {})
-        @client['tachograph/download_ddd_driver'].get(
-          params: with_key(params)
-        )
-      end
-
-      def list_ddd_vehicle(params = {})
-        @client['tachograph/list_ddd_vehicle'].get(
-          params: with_key(params)
-        )
-      end
-
-      def download_ddd_vehicle(params = {})
-        @client['tachograph/download_ddd_vehicle'].get(
-          params: with_key(params)
-        )
-      end
+      generate_action name: 'list_ddd_driver'
+      generate_action name: 'download_ddd_driver'
+      generate_action name: 'list_ddd_vehicle'
+      generate_action name: 'download_ddd_vehicle'
     end
   end
 end

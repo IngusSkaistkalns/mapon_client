@@ -31,16 +31,20 @@ Or install it yourself as:
 ## Usage
 
 ### Instantiate client:
-  * api_key - create it under Settings/API keys, if blank, will try to read environment variable MAPON_CLIENT_API_KEY on the [site](https://mapon.com/new/settings#9) 
-  * base_url - defaults to https://mapon.com/api/v1/
-  * format - json/xml, defaults to json
+  * *api_key* - create it under Settings/API keys, if left blank, will try to utilize environment variable *MAPON_CLIENT_API_KEY*
+  * *base_url* - defaults to https://mapon.com/api/v1/
+  * *format* - json/xml/structure/object, defaults to json
+    - json - raw json string from response,
+    - xml - raw xml string from response,
+    - structure - ruby Array and Hash structure (HTTP request gets made with format json),
+    - object - ruby OpenStruct objects (HTTP request gets made with format json)
 
 ```ruby
 mapon_client = MaponClient::Client.new
 # OR
 mapon_client = MaponClient::Client.new(
-  api_key: ENV['BY_DIFFERENT_NAME_API_KEY'],
-  base_url: 'https://mapon.com/api/v300/not-the-default-endpoint',
+  api_key: 'some-api-key-goes-here',
+  base_url: 'https://mapon.com/api/v2/',
   format: 'xml'
 )
 ```
@@ -57,8 +61,8 @@ Look there to find out required params in case error messages are not clear enou
 
 #### Unit list
 ```ruby
-@mapon_client.resources[:unit].list
-@mapon_client.resources[:unit].list(
+@mapon_client.unit.list
+@mapon_client.unit.list(
   unit_id: [80669', 85113], car_number: ['VY92278', 'DK56625'], empty_box_id: true,
   include: [
     'in_objects', 'io_din', 'fuel', 'can', 'reefer', 'drivers', 'temperature', 'ambienttemp', 'device', 'supply_voltage'
@@ -68,122 +72,122 @@ Look there to find out required params in case error messages are not clear enou
 
 #### Unit group
 ```ruby
-@mapon_client.resources[:unit_group].list(unit_id: [80669, 85113])
+@mapon_client.unit_group.list(unit_id: [80669, 85113])
 
-@mapon_client.resources[:unit_group].list_units(id: 11677)
+@mapon_client.unit_group.list_units(id: 11677)
 
 ```
 
 #### Unit data
 ```ruby
-@mapon_client.resources[:unit_data].ignitions(
+@mapon_client.unit_data.ignitions(
   from: '2018-02-01T00:00:00Z', till: '2018-02-10T00:00:00Z', unit_id: [80669, 85113]
 )
 
-@mapon_client.resources[:unit_data].temperature(
+@mapon_client.unit_data.temperature(
   from: '2018-02-01T00:00:00Z', till: '2018-02-20T00:00:00Z', unit_id: 80669
 )
 
-@mapon_client.resources[:unit_data].digital_inputs(
+@mapon_client.unit_data.digital_inputs(
   from: '2018-02-01T00:00:00Z', till: '2018-02-20T00:00:00Z', unit_id: 80669
 )
 
-@mapon_client.resources[:unit_data].can_period(
+@mapon_client.unit_data.can_period(
   datetime: '2018-02-01T00:00:00Z', unit_id: 80669,
   include: [
     'rpm_average', 'rpm_max', 'fuel_level', 'service_distance', 'total_distance', 'total_fuel', 'total_engine_hours', 'ambient_temperature'
   ]
 )
 
-@mapon_client.resources[:unit_data].can_point(
+@mapon_client.unit_data.can_point(
   from: '2018-02-01T00:00:00Z', till: '2018-02-20T00:00:00Z', unit_id: 80669,
   include: [
     'rpm_average', 'rpm_max', 'fuel_level', 'service_distance', 'total_distance', 'total_fuel', 'total_engine_hours', 'ambient_temperature'
   ]
 )
 
-@mapon_client.resources[:unit_data].fields(unit_id: 85188)
+@mapon_client.unit_data.fields(unit_id: 85188)
 ```
 
 #### Reefer
 ```ruby
-@mapon_client.resources[:reefer].alert_list(id: 12345, unit_id: [80669, 85113])
+@mapon_client.reefer.alert_list(id: 12345, unit_id: [80669, 85113])
 
-@mapon_client.resources[:reefer].runmodes(unit_id: [80669, 85113])
+@mapon_client.reefer.runmodes(unit_id: [80669, 85113])
 
-@mapon_client.resources[:reefer].list_temperature_data(
+@mapon_client.reefer.list_temperature_data(
   unit_id: 85113, from: '2018-01-20T00:00:00Z', till: '2018-03-03T00:00:00Z'
 )
 ```
 
 #### Route
 ```ruby
-@mapon_client.resources[:route].list(
+@mapon_client.route.list(
   from: '2018-02-20T00:00:00Z', till: '2018-03-06T00:00:00Z', unit_id: [80669, 85113], empty_box_id: true,
   include: ['polyline', 'speed', 'decoded_route', 'driver_id']
 )
 
-@mapon_client.resources[:route].custom_fields(route_id: 639655550)
+@mapon_client.route.custom_fields(route_id: 639655550)
 ```
 
-For decoding polyline use https://github.com/joshuaclayton/polylines
+*For decoding polyline use https://github.com/joshuaclayton/polylines*
 
 #### Fuel
 ```ruby
-@mapon_client.resources[:fuel].summary(
+@mapon_client.fuel.summary(
   from: '2018-02-20T00:00:00Z', till: '2018-03-06T00:00:00Z', unit_id: [86303, 80669]
 )
 
-@mapon_client.resources[:fuel].changes(
+@mapon_client.fuel.changes(
   from: '2018-02-20T00:00:00Z', till: '2018-03-06T00:00:00Z', unit_id: [86303, 80669]
 )
 ```
 
 #### Object
 ```ruby
-@mapon_client.resources[:object].list(
+@mapon_client.object.list(
   id: 345901, name: 'Depot', group_id: 0, deleted: 1, updated_from: '2017-12-22T09:50:23Z', updated_till: '2017-12-22T09:55:25Z'
 )
 
-@mapon_client.resources[:object].list_groups(id: 1234, name: 'Group name')
+@mapon_client.object.list_groups(id: 1234, name: 'Group name')
 ```
 
 #### User
 ```ruby
-@mapon_client.resources[:user].list(id: '116361', type: 'user_all')
+@mapon_client.user.list(id: '116361', type: 'user_all')
 ```
 
 #### Driver
 ```ruby
-@mapon_client.resources[:driver].list(id: 116551)
+@mapon_client.driver.list(id: 116551)
 ```
 
 #### Tachograph
 ```ruby
-@mapon_client.resources[:tachograph].list_ddd_driver(from: '2018-02-20T00:00:00Z', till: '2018-03-03T00:00:00Z')
+@mapon_client.tachograph.list_ddd_driver(from: '2018-02-20T00:00:00Z', till: '2018-03-03T00:00:00Z')
 
-@mapon_client.resources[:tachograph].download_ddd_driver(id: 55)
+@mapon_client.tachograph.download_ddd_driver(id: 55)
 
-@mapon_client.resources[:tachograph].list_ddd_vehicle(from: '2018-02-20T00:00:00Z', till: '2018-03-03T00:00:00Z')
+@mapon_client.tachograph.list_ddd_vehicle(from: '2018-02-20T00:00:00Z', till: '2018-03-03T00:00:00Z')
 
-@mapon_client.resources[:tachograph].download_ddd_vehicle(id: 55)
+@mapon_client.tachograph.download_ddd_vehicle(id: 55)
 ```
 
 #### Tracking
 ```ruby
-@mapon_client.resources[:tracking].list(from: '2018-02-20T00:00:00Z', till: '2018-03-03T00:00:00Z')
+@mapon_client.tracking.list(from: '2018-02-20T00:00:00Z', till: '2018-03-03T00:00:00Z')
 ```
 
 #### Data forward
 ```ruby
-@mapon_client.resources[:data_forward].list
+@mapon_client.data_forward.list
 
-@mapon_client.resources[:data_forward].list_packs
+@mapon_client.data_forward.list_packs
 ```
 
 #### Application menu
 ```ruby
-@mapon_client.resources[:application_menu].list
+@mapon_client.application_menu.list
 ```
 
 ### Rest client

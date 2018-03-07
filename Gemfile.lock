@@ -1,8 +1,8 @@
 PATH
   remote: .
   specs:
-    mapon_client (0.1.0)
-      rest-client (> 1)
+    mapon_client (0.2.0)
+      rest-client (~> 2)
 
 GEM
   remote: https://rubygems.org/

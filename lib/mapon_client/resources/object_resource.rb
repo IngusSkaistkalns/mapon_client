@@ -1,17 +1,8 @@
 module MaponClient
   class Resources
     class ObjectResource < Resources
-      def list(params = {})
-        @client['object/list'].get(
-          params: with_key(params)
-        )
-      end
-
-      def list_groups(params = {})
-        @client['object/list_groups'].get(
-          params: with_key(params)
-        )
-      end
+      generate_action name: 'list'
+      generate_action name: 'list_groups'
     end
   end
 end

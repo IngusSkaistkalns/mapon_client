@@ -1,17 +1,8 @@
 module MaponClient
   class Resources
     class FuelResource < Resources
-      def summary(params = {})
-        @client['fuel/summary'].get(
-          params: with_key(params)
-        )
-      end
-
-      def changes(params = {})
-        @client['fuel/changes'].get(
-          params: with_key(params)
-        )
-      end
+      generate_action name: 'summary'
+      generate_action name: 'changes'
     end
   end
 end

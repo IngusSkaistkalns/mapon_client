@@ -1,9 +1,7 @@
 module MaponClient
   class Resources
     class CompanyResource < Resources
-      def get
-        @client['company/get'].get
-      end
+      generate_action name: 'get'
     end
   end
 end

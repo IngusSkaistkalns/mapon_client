@@ -1,17 +1,8 @@
 module MaponClient
   class Resources
     class RouteResource < Resources
-      def list(params = {})
-        @client['route/list'].get(
-          params: with_key(params)
-        )
-      end
-
-      def custom_fields(params = {})
-        @client['route/custom_fields'].get(
-          params: with_key(params)
-        )
-      end
+      generate_action name: 'list'
+      generate_action name: 'custom_fields'
     end
   end
 end
