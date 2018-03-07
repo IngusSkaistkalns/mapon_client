@@ -49,6 +49,12 @@ mapon_client = MaponClient::Client.new(
 )
 ```
 
+### Structure and Object formats
+
+For format structure and object all requests are still made using json, but response gets parsed.
+In case of structure it is `JSON.parse(response)`.
+In case of object it is `JSON.parse(response, object_class: OpenStruct)`.
+
 ### Request resources
 
 Mapon API documentation can be found [here](https://mapon.com/api).
